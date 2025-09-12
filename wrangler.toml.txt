@@ -1,3 +1,0 @@
-name = "prompt-ai"
-main = "index.js"
-compatibility_date = "2025-08-22"
