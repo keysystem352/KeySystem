@@ -1,7 +1,8 @@
 const ServiceKey = "44pk-uopl-cVIp-kayv-pQjd-QdG1-Dns1-adO0-russa-1ov3r";
 const HashCode_Database = "https://hash-code-20ecd-default-rtdb.firebaseio.com/";
 const HashCode_SavedData = "https://raw.githubusercontent.com/MainScripts352/Database/refs/heads/main/Hash%20Code%20Database";
-  
+const SYSTEM_KEY = "jamx-wpf4-20gn-920g-Il0v3-Russia-382g";
+
 //-- Encode Decode Word Function
 const base32Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 function toBase32(bytes) {
@@ -51,14 +52,45 @@ function DecodeText(encoded, key) {
 //--
 
 
-// Get Date Timestamp function with 24 hours
-function getTimestamp() {
-  return Date.now() + (24 * 60 * 60 * 1000);
+function _getKeyBytes(key) {
+  return new TextEncoder().encode(key);
 }
 
-// Get Current Date Timestamp function
-function getcurrentTimestamp() {
-  return Date.now();
+function _bytesToString(bytes) {
+  if (typeof TextDecoder !== "undefined") {
+    return new TextDecoder().decode(bytes);
+  }
+  return Buffer.from(bytes).toString("utf-8");
+}
+
+function encodeWithSystemKey(message) {
+  if (typeof message !== "string") throw new TypeError("message must be a string");
+  const keyBytes = _getKeyBytes(SYSTEM_KEY);
+  const msgBytes = new TextEncoder().encode(message);
+  const keyLen = keyBytes.length;
+  let hex = "";
+  for (let i = 0; i < msgBytes.length; i++) {
+    const xored = msgBytes[i] ^ keyBytes[i % keyLen];
+    hex += xored.toString(16).padStart(2, "0");
+  }
+  return hex;
+}
+
+function decodeWithSystemKey(hexstr) {
+  if (typeof hexstr !== "string") throw new TypeError("hexstr must be a string");
+  if (hexstr.length % 2 !== 0) throw new Error("Invalid hex string length");
+  const keyBytes = _getKeyBytes(SYSTEM_KEY);
+  const keyLen = keyBytes.length;
+  const byteLen = hexstr.length / 2;
+  let outBytes = new Uint8Array(byteLen);
+  for (let i = 0; i < byteLen; i++) {
+    const pair = hexstr.substr(i * 2, 2);
+    const num = parseInt(pair, 16);
+    if (Number.isNaN(num)) throw new Error("Invalid hex characters in input");
+    const k = keyBytes[i % keyLen];
+    outBytes[i] = num ^ k;
+  }
+  return _bytesToString(outBytes);
 }
 
 
@@ -72,23 +104,8 @@ export default {
 
     // Create Key (always expires in 24h)
     if (path[0] === "create" && path[1] && method === "GET") {
-      const encodedkey = EncodeText(getTimestamp().toString(), ServiceKey);
-      const hashencoded = await fetch(`https://api.hashify.net/hash/md5/hex?value=${encodedkey}`);
-      const hash_data = await hashencoded.json();
-      const key = hash_data.Digest;
-      
-      // Detect if link is expired
-      if (getcurrentTimestamp() >= Number(atob(decodeURIComponent(path[1])))) {
-        return new Response("403: Invalid Link or Expired!", { status: 403 });
-      }
-        
-      // Put Hash Data in Hash code Database
-      const response = await fetch(`${HashCode_Database}${key}.json`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: encodedkey, type: "MD5" })
-      });
-      //
+      const encodedkey = atob(path[1]);
+      const key = encodeWithSystemKey(String(encodedkey));
 
       const html = `
       <!DOCTYPE html>
@@ -197,32 +214,15 @@ export default {
       });
     }
 
-    // Check key
+    // Check Key
     if (path[0] === "check" && path[1] && method === "GET") {
       let key = path[1];
       key = key.replace("KEY_", "");
-      
-      const githubRes = await fetch(HashCode_SavedData);
-      const githubData = await githubRes.json();
-  
-      const firebaseRes = await fetch(`${HashCode_Database}${key}.json`);
-      const firebaseData = await firebaseRes.json();
-
-      let valid = false
-      if (key in githubData) {
-        if (Number(DecodeText(githubData[key].message, ServiceKey)) >= getcurrentTimestamp()) {
-          valid = true
-        }
-      } else if (firebaseData !== null) {
-        if (Number(DecodeText(firebaseData.message, ServiceKey)) >= getcurrentTimestamp()) {
-          valid = true
-        }
-      }
-      return new Response(valid, {
+      return new Response(decodeWithSystemKey(key), {
         headers: { "Content-Type": "text/plain" }
       });
     }
-
+    
     // Check Service Status
     if (path[0] === "status" && method === "GET") {
       return new Response(true, {
