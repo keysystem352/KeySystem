@@ -231,7 +231,14 @@ export default {
     if (path[0] === "check" && path[1] && method === "GET") {
       let key = path[1];
       key = key.replace("KEY_", "");
-      return new Response(decodeWithSystemKey(key), {
+      const keytime = decodeWithSystemKey(key);
+      let result
+      if (Number(keytime) <= await getTimestamp()) {
+        result = true;
+      } else {
+        result = false;
+      }
+      return new Response(String(result), {
         headers: { "Content-Type": "text/plain" }
       });
     }
@@ -243,11 +250,6 @@ export default {
       });
     }
 
-    if (path[0] === "test" && method === "GET") {
-      return new Response(`${getTimestamp()}\n${getTimestamp(1)}`, {
-        headers: { "Content-Type": "text/plain" }
-      });
-    }
     return new Response("404: Not found", { status: 404 });
   }
 };
