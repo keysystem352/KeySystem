@@ -1,7 +1,7 @@
 const ServiceKey = "44pk-uopl-cVIp-kayv-pQjd-QdG1-Dns1-adO0-russa-1ov3r";
 const HashCode_Database = "https://hash-code-20ecd-default-rtdb.firebaseio.com/";
 const HashCode_SavedData = "https://raw.githubusercontent.com/MainScripts352/Database/refs/heads/main/Hash%20Code%20Database";
-const SYSTEM_KEY = "keys-4nap-kanc-759g-Il0v3-Russia-382g";
+const SYSTEM_KEY = "02ks-30nd-kanc-lwn5-Il0v3-Russia-382g";
 
 //-- Encode Decode Word Function
 const base32Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
@@ -94,15 +94,10 @@ function decodeWithSystemKey(hexstr) {
 }
 
 // Get timestamp with days expiration
-async function getTimestamp(days = 0) {
-  const response = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=UTC");
-  const time = await response.json();
-  const year = time.year;
-  const month = String(time.month).padStart(2, "0");
-  const day = String(time.day + days).padStart(2, "0"); // add days
-  const minute = String(time.minute).padStart(2, "0");
-  const seconds = String(time.seconds).padStart(2, "0");
-  return `${year}${month}${day}${minute}${seconds}`;
+function getTimestamp(days = 0) {
+  const now = Date.now();
+  const add = days * 24 * 60 * 60 * 1000;
+  return now + add;
 }
 
 
@@ -237,6 +232,14 @@ export default {
       let key = path[1];
       key = key.replace("KEY_", "");
       return new Response(decodeWithSystemKey(key), {
+        headers: { "Content-Type": "text/plain" }
+      });
+    }
+
+    // Get Time
+    if (path[0] === "time" && method === "GET") {
+      const time = getTimestamp();
+      return new Response(String(time), {
         headers: { "Content-Type": "text/plain" }
       });
     }
