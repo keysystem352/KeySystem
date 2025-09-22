@@ -95,12 +95,9 @@ function decodeWithSystemKey(hexstr) {
 
 // Get timestamp with days expiration
 async function getTimestamp(days = 0) {
-  const response = await fetch("http://worldclockapi.com/api/json/utc/now");
-  const data = await response.json();
-  const time = data.currentFileTime;
-  const timeMs = Math.floor(time / 10000);
-  const addedMs = days * 24 * 60 * 60 * 1000;
-  return timeMs + addedMs;
+  const time = Math.floor(Date.now() / 1000) * 10000;
+  const added = days * 24 * 60 * 60 * 10000;
+  return time + added;
 }
 
 
@@ -245,7 +242,12 @@ export default {
         headers: { "Content-Type": "text/plain" }
       });
     }
-    
+
+    if (path[0] === "test" && method === "GET") {
+      return new Response(`${getTimestamp()}\n${getTimestamp(1)}`, {
+        headers: { "Content-Type": "text/plain" }
+      });
+    }
     return new Response("404: Not found", { status: 404 });
   }
 };
