@@ -123,7 +123,7 @@ export default {
 
     .banner-container {
       width: 100%;
-      display: flex;
+      display: block;
       justify-content: center;
       align-items: center;
       margin: 20px 0;
