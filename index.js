@@ -121,6 +121,14 @@ export default {
       word-break: break-all;
     }
 
+    .banner-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+    }
+
     button {
       padding: 12px 30px;
       font-size: 16px;
