@@ -145,6 +145,7 @@ export default {
   <!-- -->
 
   <!-- BANNER AD -->
+  <div id="top-banner" class="banner-container">
   <script>
   atOptions = {
     'key' : '0c614c7f2078b2f1f07d1dac207e4e99',
@@ -155,6 +156,7 @@ export default {
   };
   </script>
   <script src="https://www.highperformanceformat.com/0c614c7f2078b2f1f07d1dac207e4e99/invoke.js"></script>
+  </div>
   <!-- -->
   
   <div class="container">
@@ -165,6 +167,7 @@ export default {
   </div>
 
   <!-- BANNER AD -->
+  <div id="top-banner" class="banner-container">
   <script>
   atOptions = {
     'key' : 'e57b92dbfcd6136f0f52a6b143c3abbb',
@@ -175,6 +178,7 @@ export default {
   };
   </script>
   <script src="https://www.highperformanceformat.com/e57b92dbfcd6136f0f52a6b143c3abbb/invoke.js"></script>
+  </div>
   <!-- -->
   
   <script>
