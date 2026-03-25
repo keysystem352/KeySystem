@@ -121,14 +121,6 @@ export default {
       word-break: break-all;
     }
 
-    .banner-container {
-      width: 100%;
-      display: block;
-      justify-content: center;
-      align-items: center;
-      margin: 20px 0;
-    }
-
     button {
       padding: 12px 30px;
       font-size: 16px;
@@ -151,21 +143,6 @@ export default {
   <!-- Adsterra to Earn Money -->
   <script src="https://pl28955384.profitablecpmratenetwork.com/f4/11/9f/f4119f495b011890e222c01927fd7898.js"></script>
   <!-- -->
-
-  <!-- BANNER AD -->
-  <div id="top-banner" class="banner-container">
-  <script>
-  atOptions = {
-    'key' : '0c614c7f2078b2f1f07d1dac207e4e99',
-    'format' : 'iframe',
-    'height' : 60,
-    'width' : 468,
-    'params' : {}
-  };
-  </script>
-  <script src="https://www.highperformanceformat.com/0c614c7f2078b2f1f07d1dac207e4e99/invoke.js"></script>
-  </div>
-  <!-- -->
   
   <div class="container">
     <div class="title">Your Access Key</div>
@@ -173,21 +150,6 @@ export default {
     <div class="key-text" id="keyText">KEY_${key}</div>
     <button id="copyBtn" onclick="copyKey()">Copy Key</button>
   </div>
-
-  <!-- BANNER AD -->
-  <div id="top-banner" class="banner-container">
-  <script>
-  atOptions = {
-    'key' : 'e57b92dbfcd6136f0f52a6b143c3abbb',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  };
-  </script>
-  <script src="https://www.highperformanceformat.com/e57b92dbfcd6136f0f52a6b143c3abbb/invoke.js"></script>
-  </div>
-  <!-- -->
   
   <script>
     function copyKey() {
