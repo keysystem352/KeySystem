@@ -57,6 +57,7 @@ export default {
     const path = url.pathname.split("/").filter(Boolean);
     const method = request.method;
     const ip = request.headers.get("CF-Connecting-IP") || "Unknown";
+    const countryCode = request.headers.get("CF-IPCountry") || "Unknown";
     const referer = request.headers.get("referer"); // get 1st link to redirected link
     
     // Make Key Starter
@@ -141,7 +142,7 @@ export default {
 <body>
 
   <!-- Adsterra to Earn Money -->
-  <script src="https://pl28955384.profitablecpmratenetwork.com/f4/11/9f/f4119f495b011890e222c01927fd7898.js"></script>
+  <script src="https://pl28955444.profitablecpmratenetwork.com/fc/15/9f/fc159feae31d894d63a77a384f0bc8f3.js"></script>
   <!-- -->
   
   <div class="container">
@@ -150,7 +151,7 @@ export default {
     <div class="key-text" id="keyText">KEY_${key}</div>
     <button id="copyBtn" onclick="copyKey()">Copy Key</button>
   </div>
-  
+
   <script>
     function copyKey() {
       const keyText = document.getElementById("keyText").innerText;
@@ -200,6 +201,9 @@ export default {
         ctx.waitUntil(RemoveData(key)); // code below it will run imidietly without waiting it finished
         ctx.waitUntil(ClearExpiredData()); // code below it will run imidietly without waiting it finished
         return new Response("403: Key Expired", { status: 403 });
+      }
+      if ("country_code" in result && countryCode !== result.country_code) {
+        return new Response("400: Bad Request", { status: 400 });
       }
       return new Response('200: Success', {
         headers: { "Content-Type": "text/plain" }
